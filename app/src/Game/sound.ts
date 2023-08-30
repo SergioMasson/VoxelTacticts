@@ -17,16 +17,16 @@ export class GameSound
 
 	constructor(scene: Scene) {
 		this.audioComponent = new AudioSceneComponent(scene);
-		this.attackSfx = new Sound("Attack_sfx", "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/sfx/attack.wav", scene, function () { });
-		this.select1 = new Sound("Select1", "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/sfx/select1.wav", scene, function () { });
-		this.select2 = new Sound("Select1", "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/sfx/select2.wav", scene, function () { });
-		this.move = new Sound("Move", "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/sfx/move.wav", scene, function () { });
+		this.attackSfx = new Sound("Attack_sfx", "./sfx/attack.wav", scene, function () { });
+		this.select1 = new Sound("Select1", "./sfx/select1.wav", scene, function () { });
+		this.select2 = new Sound("Select1", "./sfx/select2.wav", scene, function () { });
+		this.move = new Sound("Move", "./sfx/move.wav", scene, function () { });
 		
 		let layersReady = 0;
 
-		this.layer1 = new Sound("layer1", "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/songs/layer1.wav", scene, soundReady, { loop: true, autoplay: false });
-		this.layer2 = new Sound("layer2", "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/songs/layer2.wav", scene, soundReady, { loop: true, autoplay: false });
-		this.layer3 = new Sound("layer3", "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/songs/layer3.wav", scene, soundReady, { loop: true, autoplay: false });
+		this.layer1 = new Sound("layer1", "./songs/layer1.wav", scene, soundReady, { loop: true, autoplay: false });
+		this.layer2 = new Sound("layer2", "./songs/layer2.wav", scene, soundReady, { loop: true, autoplay: false });
+		this.layer3 = new Sound("layer3", "./songs/layer3.wav", scene, soundReady, { loop: true, autoplay: false });
 
 		this.layer1.setVolume(2);
 		this.layer2.setVolume(0);

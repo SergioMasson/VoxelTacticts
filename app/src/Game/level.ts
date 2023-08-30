@@ -11,15 +11,10 @@ import { Scene } from "@babylonjs/core/scene";
 import { Board } from "./board";
 import { Entity, LookDirection } from "./entity";
 
-
-const publicURL = "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public";
-const privateURL = ".";
-const isLocal = true;
-
 export class GameLevel {
 
     public static async LoadFromJSONAsync(levelName: string, scene: Scene, camera: ArcRotateCamera): Promise<Board> {
-        const response = await fetch(`${isLocal ? privateURL: publicURL}/levels/${levelName}.json`);
+        const response = await fetch(`./levels/${levelName}.json`);
         const json = await response.json();
 
         const width = json.boardWidth;
@@ -118,14 +113,14 @@ export class GameLevel {
     }
 
     static async LoadEntity(entityName: string, scaling: Vector3): Promise<AbstractMesh> {
-        const resultPlayer = await SceneLoader.ImportMeshAsync(null, "", `https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/models/${entityName}.glb`);
+        const resultPlayer = await SceneLoader.ImportMeshAsync(null, "", `./models/${entityName}.glb`);
         const result = resultPlayer.meshes[0].getChildMeshes()[0];
         result.scaling = scaling;
         const playerMaterial = new StandardMaterial("");
         result.material = playerMaterial;
         result.isVisible = false;
 
-        playerMaterial.diffuseTexture = new Texture(`https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/textures/player.png`);
+        playerMaterial.diffuseTexture = new Texture(`./textures/player.png`);
         return result;
     }
 }

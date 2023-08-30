@@ -81,13 +81,13 @@ export class Game
 
     async LoadEntity(entityName: string, scaling: Vector3) : Promise<AbstractMesh>
     {
-        const resultPlayer = await SceneLoader.ImportMeshAsync(null, "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/models/", `${entityName}.glb`);
+        const resultPlayer = await SceneLoader.ImportMeshAsync(null, "./models/", `${entityName}.glb`);
         const result = resultPlayer.meshes[0];
         result.scaling = scaling;
         const playerMaterial = new StandardMaterial("");
         result.material = playerMaterial;
         result.isVisible = false;
-        playerMaterial.diffuseTexture = new Texture(`https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/textures/player.png`);
+        playerMaterial.diffuseTexture = new Texture(`./textures/player.png`);
         return result;
     }
 
@@ -112,7 +112,7 @@ export class Game
         this.disposed = true;
 
         var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-        advancedTexture.parseFromURLAsync("https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/UI/END_SCREEN.json");
+        advancedTexture.parseFromURLAsync("./UI/END_SCREEN.json");
         this.sound.MuteMusic();
     }
 
