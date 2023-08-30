@@ -1,3 +1,3 @@
-# tank3d
+# Voxel Tactics
 
-WIP game made with Babylon.js
+Voxel Tactics is a turn based voxel style game made in Babylon.js.
