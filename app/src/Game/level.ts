@@ -1,6 +1,7 @@
-import * as BABYLON from "@babylonjs/core";
 import { Board } from "./board";
-import { Entity, LookDirection } from "./entity";
+import { Entity } from "./entity";
+import { LookDirection } from "./entity";
+import * as BABYLON from "@babylonjs/core";
 
 const publicURL = "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public";
 const privateURL = ".";
@@ -9,7 +10,7 @@ const isLocal = false;
 export class GameLevel {
 
     public static async LoadFromJSONAsync(levelName: string, scene: BABYLON.Scene, camera: BABYLON.ArcRotateCamera): Promise<Board> {
-        const response = await fetch(`${isLocal ? privateURL : publicURL}/levels/${levelName}.json`);
+        const response = await fetch(`${isLocal ? privateURL: publicURL}/levels/${levelName}.json`);
         const json = await response.json();
 
         const width = json.boardWidth;
@@ -22,7 +23,7 @@ export class GameLevel {
         const oddColor = new BABYLON.Color3(oddColorJSON.r, oddColorJSON.g, oddColorJSON.b);
 
         const board = new Board(scene, width, height, eventColor, oddColor);
-        const meshTable: { [id: string] : BABYLON.AbstractMesh | undefined; } = {};
+        const meshTable = {};
 
         meshTable["swordman"] = await this.LoadEntity("swordman", new BABYLON.Vector3(0.5, 0.5, 0.5));
         meshTable["druidGirl"] = await this.LoadEntity("druidGirl", new BABYLON.Vector3(0.5, 0.5, 0.5));
@@ -107,21 +108,9 @@ export class GameLevel {
         }
     }
 
-    static async LoadEntity(entityName: string, scaling: BABYLON.Vector3): Promise<BABYLON.AbstractMesh | undefined> {
+    static async LoadEntity(entityName: string, scaling: BABYLON.Vector3): Promise<BABYLON.AbstractMesh> {
         const resultPlayer = await BABYLON.SceneLoader.ImportMeshAsync(null, "", `https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/models/${entityName}.glb`);
-        
-        const firstMesh = resultPlayer.meshes[0];
-        
-        if(firstMesh == undefined) {
-            return undefined;
-        }
-        
-        const result = firstMesh.getChildMeshes()[0];
-
-        if(result == undefined) {
-            return undefined;
-        }
-
+        const result = resultPlayer.meshes[0].getChildMeshes()[0];
         result.scaling = scaling;
         const playerMaterial = new BABYLON.StandardMaterial("");
         result.material = playerMaterial;

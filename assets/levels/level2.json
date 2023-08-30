@@ -1,0 +1,123 @@
+{
+    "boardWidth" : 20,
+    "boardHeight" : 20,
+    "boardOddColor": {
+        "r": 1,
+        "g": 0,
+        "b": 1
+    },
+    "boardEvenColor": {
+        "r": 0.75,
+        "g": 0.25,
+        "b": 0.75
+    },
+    "camera":{
+        "alpha": 0.7193,
+        "beta": 1.0472,
+        "radius": 10,
+        "target":{
+            "x": 0.033,
+            "y": -0.362,
+            "z": 0.180
+        }
+    },
+    "players": [
+        {
+            "x": 10,
+            "z": 5,
+            "type": "swordman",
+            "attack": 2,
+            "health": 4,
+            "attackRange": 2,
+            "range": 4
+        },
+        {
+            "x": 12,
+            "z": 5,
+            "type": "druidGirl",
+            "attack": 2,
+            "health": 4,
+            "attackRange": 2,
+            "range": 4
+        },
+        {
+            "x": 14,
+            "z": 5,
+            "type": "druidGirl",
+            "attack": 2,
+            "health": 4,
+            "attackRange": 2,
+            "range": 4
+        }
+    ],
+    "enemies": [
+        {
+            "x": 10,
+            "z": 12,
+            "type": "death",
+            "attack": 4,
+            "health": 2,
+            "attackRange": 1,
+            "range": 2
+        },
+        {
+            "x": 11,
+            "z": 14,
+            "type": "death",
+            "attack": 4,
+            "health": 2,
+            "attackRange": 1,
+            "range": 2
+        },
+        {
+            "x": 12,
+            "z": 12,
+            "type": "death",
+            "attack": 4,
+            "health": 2,
+            "attackRange": 1,
+            "range": 2
+        },
+        {
+            "x": 13,
+            "z": 14,
+            "type": "death",
+            "attack": 4,
+            "health": 2,
+            "attackRange": 1,
+            "range": 2
+        },
+        {
+            "x": 14,
+            "z": 12,
+            "type": "death",
+            "attack": 4,
+            "health": 2,
+            "attackRange": 1,
+            "range": 2
+        },
+        {
+            "x": 16,
+            "z": 12,
+            "type": "death",
+            "attack": 4,
+            "health": 2,
+            "attackRange": 1,
+            "range": 2
+        }
+    ],
+    "environments":[
+        {
+            "type": "flower",
+            "count": 300
+        },
+        {
+            "type": "grass",
+            "count": 50
+        },
+        {
+            "type": "stone",
+            "count": 10
+        }
+    ]
+}

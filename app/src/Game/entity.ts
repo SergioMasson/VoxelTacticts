@@ -1,6 +1,6 @@
-import * as BABYLON from "@babylonjs/core/";
-import { AnimCreator } from "./animCreator";
 import { Board } from "./board";
+import { AnimCreator } from "./animCreator";
+import * as BABYLON from "@babylonjs/core/";
 
 export enum LookDirection
 {
@@ -22,6 +22,7 @@ export class Entity
     private health: number;
     private attackPoints: number;
     private transformNode: BABYLON.TransformNode;
+    private type: string;
     private healthBar: BABYLON.Mesh;
     private isBlocking: boolean;
     private blockShield: BABYLON.InstancedMesh;
@@ -30,7 +31,6 @@ export class Entity
 
     constructor(board : Board, rootMesh: BABYLON.Mesh, type: string, maxHealth: number, attackPoints: number, attackRange: number, range: number, shield: BABYLON.Mesh) 
     {
-        this.boardPosition = new BABYLON.Vector2();
         this.mainBoard = board;
         this.instanceMesh = rootMesh.createInstance("entity");
         this.instanceMesh.metadata = { type: "entity", x: 0, z: 0};

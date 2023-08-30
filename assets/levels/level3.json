@@ -1,0 +1,87 @@
+{
+    "boardWidth" : 30,
+    "boardHeight" : 30,
+    "boardOddColor": {
+        "r": 0.25,
+        "g": 0,
+        "b": 0.25
+    },
+    "boardEvenColor": {
+        "r": 0.25,
+        "g": 0.25,
+        "b": 0.50
+    },
+    "camera":{
+        "alpha": 1.046,
+        "beta": 0.785,
+        "radius": 8,
+        "target":{
+            "x": -7,
+            "y": 0,
+            "z": -4
+        }
+    },
+    "players": [
+        {
+            "x": 1,
+            "z": 1,
+            "type": "swordman",
+            "attack": 2,
+            "health": 1,
+            "attackRange": 2,
+            "range": 4
+        },
+        {
+            "x": 2,
+            "z": 1,
+            "type": "druidGirl",
+            "attack": 2,
+            "health": 1,
+            "attackRange": 2,
+            "range": 4
+        },
+        {
+            "x": 3,
+            "z": 1,
+            "type": "druidGirl",
+            "attack": 2,
+            "health": 1,
+            "attackRange": 2,
+            "range": 4
+        }
+    ],
+    "enemies": [
+        {
+            "x": 6,
+            "z": 12,
+            "type": "death",
+            "attack": 1,
+            "health": 4,
+            "attackRange": 1,
+            "range": 2
+        },
+        {
+            "x": 2,
+            "z": 11,
+            "type": "enemy",
+            "attack": 1,
+            "health": 4,
+            "attackRange": 1,
+            "range": 2
+        }
+    ],
+    "environments":[
+        {
+            "type": "flower",
+            "count": 50
+        },
+        {
+            "type": "grass",
+            "count": 50
+        },
+        {
+            "type": "stone",
+            "count": 10
+        }
+    ]
+}

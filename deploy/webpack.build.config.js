@@ -33,6 +33,6 @@ module.exports = {
       DEV_BUILD: false,
       VERSION: JSON.stringify(version),
     }),
-    new HtmlWebpackPlugin({ title: "tank3d" }),
+    new HtmlWebpackPlugin({ title: "voxeltactics" }),
   ],
 };

@@ -1,6 +1,7 @@
 import * as BABYLON from "@babylonjs/core";
 
-export class Sound {
+export class Sound
+{ 
 	private attackSfx: BABYLON.Sound;
 	private select1: BABYLON.Sound;
 	private select2: BABYLON.Sound;
@@ -15,7 +16,7 @@ export class Sound {
 		this.select1 = new BABYLON.Sound("Select1", "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/sfx/select1.wav", scene, function () { });
 		this.select2 = new BABYLON.Sound("Select1", "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/sfx/select2.wav", scene, function () { });
 		this.move = new BABYLON.Sound("Move", "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/sfx/move.wav", scene, function () { });
-
+		
 		let layersReady = 0;
 
 		this.layer1 = new BABYLON.Sound("layer1", "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/songs/layer1.wav", scene, soundReady, { loop: true, autoplay: false });
@@ -25,7 +26,7 @@ export class Sound {
 		this.layer1.setVolume(2);
 		this.layer2.setVolume(0);
 		this.layer3.setVolume(0);
-
+		
 		let soundPlayer = this;
 
 		function soundReady() {
@@ -37,6 +38,8 @@ export class Sound {
 				soundPlayer.layer3.play();
 			}
 		}
+
+		let efeitos = this;
 	}
 
 	public MuteMusic(): void {
@@ -73,7 +76,7 @@ export class Sound {
 
 	public SelectSound(): void {
 		let qual = Math.random() > 0.5;
-
+		
 		if (qual) this.select1.play();
 		else this.select2.play();
 	}

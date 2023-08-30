@@ -1,0 +1,1 @@
+{"animations":[{"name":"Attack_Anim","property":"position","framePerSecond":60,"dataType":1,"loopBehavior":1,"blendingSpeed":0.01,"keys":[{"frame":0,"values":[0,0,0,[0,0,0],[0,0,0]]},{"frame":25.42287538889798,"values":[0,1,0,[0,0,0],[0,0,0]]},{"frame":30,"values":[0,0,0,[0,0,0],[0,0,0]]}],"ranges":[]}]}
