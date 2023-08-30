@@ -1,10 +1,10 @@
-import { GameState } from "./../state";
+import { Camera } from "@babylonjs/core/Cameras/camera";
+import { Scene } from "@babylonjs/core/scene";
 import { Board } from "../../board";
 import { Cursor } from "../../cursor";
 import { Entity } from "../../entity";
-import * as BABYLON from "@babylonjs/core";
-import * as GUI from "@babylonjs/gui";
-import { Sound } from "../../sound";
+import { GameSound } from "../../sound";
+import { GameState } from "./../state";
 
 export class ActionExecuteState implements GameState
 {
@@ -13,9 +13,9 @@ export class ActionExecuteState implements GameState
 		private watchedEntity: Entity;
 		private attackedEntities: Array<Entity>;
 		private gameState: Array<number>;
-		private soundPlayer: Sound;
+		private soundPlayer: GameSound;
     
-    constructor(scene: BABYLON.Scene, board: Board, camera: BABYLON.Camera, cursor: Cursor, sound: Sound)
+    constructor(scene: Scene, board: Board, camera: Camera, cursor: Cursor, sound: GameSound)
     {
 			this.board = board;
 			this.soundPlayer = sound;

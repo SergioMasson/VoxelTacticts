@@ -1,20 +1,23 @@
-import { GameState } from "./../state";
+import { Camera } from "@babylonjs/core/Cameras/camera";
+import { PointerEventTypes, PointerInfo } from "@babylonjs/core/Events/pointerEvents";
+import { Observer } from "@babylonjs/core/Misc/observable";
+import { Scene } from "@babylonjs/core/scene";
 import { Board } from "../../board";
 import { Cursor } from "../../cursor";
-import * as BABYLON from "@babylonjs/core";
-import { Sound } from "../../sound";
+import { GameSound } from "../../sound";
+import { GameState } from "./../state";
 
 export class CellSelectState implements GameState
 {
     private board: Board;
-    private scene: BABYLON.Scene;
+    private scene: Scene;
     private cursor: Cursor;
     private shouldEnd: boolean;
-    private onClickObservable: BABYLON.Observer<BABYLON.PointerInfo>;
+    private onClickObservable: Observer<PointerInfo>;
     private nextStateInfo: Array<Number>;
-    private soundPlayer: Sound;
+    private soundPlayer: GameSound;
 
-    constructor(scene: BABYLON.Scene, board: Board, camera: BABYLON.Camera, cursor: Cursor, sound: Sound) {
+    constructor(scene: Scene, board: Board, camera: Camera, cursor: Cursor, sound: GameSound) {
         this.board = board;
         this.scene = scene;
         this.cursor = cursor;
@@ -37,7 +40,7 @@ export class CellSelectState implements GameState
 
         this.onClickObservable = this.scene.onPointerObservable.add((pointerInfo) => 
         {
-            if(pointerInfo.type == BABYLON.PointerEventTypes.POINTERDOWN)
+            if(pointerInfo.type == PointerEventTypes.POINTERDOWN)
             {
                 if (this.cursor.getCursorOverCell()) {
                     let cursorPos = this.cursor.getCursorOverPos();

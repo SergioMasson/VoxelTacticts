@@ -1,16 +1,16 @@
-import * as BABYLON from "@babylonjs/core";
+import { Animation } from "@babylonjs/core/Animations/animation";
 
 export class AnimCreator {
-	static CreateUpDownAnimation(base: number, top: number, duration: number): BABYLON.Animation {
+	static CreateUpDownAnimation(base: number, top: number, duration: number): Animation {
 		const frameRate = 30;
 		const animDuration = duration * frameRate;   
 
-		var jumpY = new BABYLON.Animation(
+		var jumpY = new Animation(
 			"jumpY",
 			"position.y",
 			frameRate,
-			BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-			BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+			Animation.ANIMATIONTYPE_FLOAT,
+			Animation.ANIMATIONLOOPMODE_CYCLE
 		);
 
 		var jumpYKeys = [];

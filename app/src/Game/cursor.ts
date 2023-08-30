@@ -1,39 +1,44 @@
-import * as BABYLON from "@babylonjs/core";
-import { Board } from "./board";
+import { AnimationGroup } from "@babylonjs/core/Animations/animationGroup";
+import { Camera } from "@babylonjs/core/Cameras/camera";
+import { Matrix, Vector2, Vector3 } from "@babylonjs/core/Maths/math.vector";
+import { Mesh } from "@babylonjs/core/Meshes/mesh";
+import { TransformNode } from "@babylonjs/core/Meshes/transformNode";
+import { Scene } from "@babylonjs/core/scene";
 import { AnimCreator } from "./animCreator";
+import { Board } from "./board";
 
 const CURSOR_BASE_HEIGHT = 0.5;
 
 export class Cursor
 {
     private board : Board;
-    private camera : BABYLON.Camera;
-    private scene : BABYLON.Scene;
-    private mesh: BABYLON.Mesh;
-    private animationGroupLow: BABYLON.AnimationGroup;
-    private animationGroupHigh: BABYLON.AnimationGroup;
-    private transformNode: BABYLON.TransformNode;
+    private camera : Camera;
+    private scene : Scene;
+    private mesh: Mesh;
+    private animationGroupLow: AnimationGroup;
+    private animationGroupHigh: AnimationGroup;
+    private transformNode: TransformNode;
     private overEntity: boolean;
     private overCell: boolean;
     private overX: number;
     private overZ: number;
     private fixed: boolean;
 
-    constructor(board: Board, scene: BABYLON.Scene, camera: BABYLON.Camera, mesh: BABYLON.Mesh)
+    constructor(board: Board, scene: Scene, camera: Camera, mesh: Mesh)
     {
       this.board = board;
       this.scene = scene;
       this.camera = camera;
       this.mesh = mesh;
-      this.animationGroupLow = new BABYLON.AnimationGroup("Cursor");
-      this.animationGroupHigh = new BABYLON.AnimationGroup("Cursor");
+      this.animationGroupLow = new AnimationGroup("Cursor");
+      this.animationGroupHigh = new AnimationGroup("Cursor");
       
       this.CreateUpDownAnimation(CURSOR_BASE_HEIGHT, CURSOR_BASE_HEIGHT + 0.5, this.animationGroupLow);
       this.CreateUpDownAnimation(CURSOR_BASE_HEIGHT + 1, CURSOR_BASE_HEIGHT + 1.5, this.animationGroupHigh);
 
-      this.transformNode = new BABYLON.TransformNode("CursorRoot");
+      this.transformNode = new TransformNode("CursorRoot");
       this.mesh.setParent(this.transformNode, true);
-      this.mesh.rotation = new BABYLON.Vector3(Math.PI, 0, 0);
+      this.mesh.rotation = new Vector3(Math.PI, 0, 0);
 
       this.animationGroupLow.play(true);
       
@@ -44,7 +49,7 @@ export class Cursor
       this.fixed = false;
     }
 
-    private CreateUpDownAnimation(base: number, top: number, animgroup: BABYLON.AnimationGroup): void {
+    private CreateUpDownAnimation(base: number, top: number, animgroup: AnimationGroup): void {
         animgroup.addTargetedAnimation(AnimCreator.CreateUpDownAnimation(base, top, 2), this.mesh);
     }
   
@@ -56,8 +61,8 @@ export class Cursor
       return this.overCell;
     }
   
-    getCursorOverPos(): BABYLON.Vector2 {
-      return new BABYLON.Vector2(this.overX, this.overZ);
+    getCursorOverPos(): Vector2 {
+      return new Vector2(this.overX, this.overZ);
     }
   
     fixCursor(): void{
@@ -84,7 +89,7 @@ export class Cursor
  
     Update() : void
     {
-        var ray = this.scene.createPickingRay(this.scene.pointerX, this.scene.pointerY, BABYLON.Matrix.Identity(), this.camera, false);	
+        var ray = this.scene.createPickingRay(this.scene.pointerX, this.scene.pointerY, Matrix.Identity(), this.camera, false);	
         var pickResult = this.scene.pickWithRay(ray);
 
         if (pickResult.hit == true)

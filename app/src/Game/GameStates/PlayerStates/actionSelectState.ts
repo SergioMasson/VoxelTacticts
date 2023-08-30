@@ -1,26 +1,31 @@
-import { GameState } from "./../state";
+import { Camera } from "@babylonjs/core/Cameras/camera";
+import { Scene } from "@babylonjs/core/scene";
+
+import { AdvancedDynamicTexture } from "@babylonjs/gui/2D/advancedDynamicTexture";
+import { Button } from "@babylonjs/gui/2D/controls/button";
+import { Control } from "@babylonjs/gui/2D/controls/control";
+
 import { Board } from "../../board";
 import { Cursor } from "../../cursor";
-import * as BABYLON from "@babylonjs/core";
-import * as GUI from "@babylonjs/gui";
-import { Sound } from "../../sound";
+import { GameSound } from "../../sound";
+import { GameState } from "./../state";
 
 export class ActionSelectState implements GameState
 {
     private board: Board;
-    private UI: GUI.AdvancedDynamicTexture;
+    private UI: AdvancedDynamicTexture;
     private shouldEnd: boolean;
     private gameState: Array<number>;
-    private soundPlayer: Sound;
+    private soundPlayer: GameSound;
     
-    constructor(scene: BABYLON.Scene, board: Board, camera: BABYLON.Camera, cursor: Cursor, sound: Sound)
+    constructor(scene: Scene, board: Board, camera: Camera, cursor: Cursor, sound: GameSound)
     {
         this.board = board;
         this.soundPlayer = sound;
     }
 
-    createButton(texto: string, left: number, top: number, actionState: ActionSelectState): GUI.Button {
-        var button1 = GUI.Button.CreateSimpleButton("but1", texto);
+    createButton(texto: string, left: number, top: number, actionState: ActionSelectState): Button {
+        var button1 = Button.CreateSimpleButton("but1", texto);
         button1.width = "150px"
         button1.height = "40px";
         button1.color = "white";
@@ -33,8 +38,8 @@ export class ActionSelectState implements GameState
             else actionState.gameState.push(0);
         });
 
-        button1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-        button1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        button1.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
+        button1.verticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
 
         button1.left = left + "%";
         button1.top = top + "%";
@@ -46,7 +51,7 @@ export class ActionSelectState implements GameState
     {
         let adjacentCells = this.board.FindAround(state[2], state[3], 2, "cell", true);
         let attackedEntities = [];
-        this.UI = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+        this.UI = AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
         for (let c in adjacentCells) {
             let cell = adjacentCells[c];

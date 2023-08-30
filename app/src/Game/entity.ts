@@ -1,6 +1,13 @@
-import { Board } from "./board";
+import { AnimationGroup } from "@babylonjs/core/Animations/animationGroup";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
+import { Color3 } from "@babylonjs/core/Maths/math.color";
+import { Vector2, Vector3 } from "@babylonjs/core/Maths/math.vector";
+import { InstancedMesh } from "@babylonjs/core/Meshes/instancedMesh";
+import { Mesh } from "@babylonjs/core/Meshes/mesh";
+import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
+import { TransformNode } from "@babylonjs/core/Meshes/transformNode";
 import { AnimCreator } from "./animCreator";
-import * as BABYLON from "@babylonjs/core/";
+import { Board } from "./board";
 
 export enum LookDirection
 {
@@ -14,22 +21,22 @@ export enum LookDirection
 export class Entity 
 {
     private mainBoard : Board;
-    private instanceMesh: BABYLON.InstancedMesh;
-    private boardPosition: BABYLON.Vector2;
+    private instanceMesh: InstancedMesh;
+    private boardPosition: Vector2;
     private moveRange: number;
     private attackRange: number;
     private startHealth: number;
     private health: number;
     private attackPoints: number;
-    private transformNode: BABYLON.TransformNode;
+    private transformNode: TransformNode;
     private type: string;
-    private healthBar: BABYLON.Mesh;
+    private healthBar: Mesh;
     private isBlocking: boolean;
-    private blockShield: BABYLON.InstancedMesh;
+    private blockShield: InstancedMesh;
 
-    private attackAnim: BABYLON.AnimationGroup;
+    private attackAnim: AnimationGroup;
 
-    constructor(board : Board, rootMesh: BABYLON.Mesh, type: string, maxHealth: number, attackPoints: number, attackRange: number, range: number, shield: BABYLON.Mesh) 
+    constructor(board : Board, rootMesh: Mesh, type: string, maxHealth: number, attackPoints: number, attackRange: number, range: number, shield: Mesh) 
     {
         this.mainBoard = board;
         this.instanceMesh = rootMesh.createInstance("entity");
@@ -38,11 +45,11 @@ export class Entity
         this.attackRange = attackRange;
 
         this.blockShield = shield.createInstance("entity_shield");
-        this.transformNode = new BABYLON.TransformNode("EntityRoot");
+        this.transformNode = new TransformNode("EntityRoot");
         this.instanceMesh.setParent(this.transformNode, true);
         this.blockShield.setParent(this.transformNode, true);
         this.blockShield.position.y = -10000000;
-        this.blockShield.rotation = new BABYLON.Vector3(0, 0, 0);
+        this.blockShield.rotation = new Vector3(0, 0, 0);
 
         this.instanceMesh.metadata = {
             type: type,
@@ -50,8 +57,8 @@ export class Entity
             z: 0
         };
 
-        var plane = BABYLON.MeshBuilder.CreatePlane("plane", {
-            sideOrientation: BABYLON.Mesh.DOUBLESIDE,
+        var plane = MeshBuilder.CreatePlane("plane", {
+            sideOrientation: Mesh.DOUBLESIDE,
             width: 0.25,
             height: 0.125
         });
@@ -62,13 +69,13 @@ export class Entity
         this.health = this.startHealth;
         this.attackPoints = attackPoints;
 
-        let material = new BABYLON.StandardMaterial("")
+        let material = new StandardMaterial("")
         plane.material = material;
-        material.emissiveColor = new BABYLON.Color3(0.7, 0.2, 0.2);
+        material.emissiveColor = new Color3(0.7, 0.2, 0.2);
 
         this.healthBar = plane;
 
-        this.attackAnim = new BABYLON.AnimationGroup("");
+        this.attackAnim = new AnimationGroup("");
         this.attackAnim.addTargetedAnimation(AnimCreator.CreateUpDownAnimation(0, 1, 0.5), this.instanceMesh);
 
         this.isBlocking = false;
@@ -80,7 +87,7 @@ export class Entity
         return true;
     }
 
-    public getEntityBoardPos(): BABYLON.Vector2 {
+    public getEntityBoardPos(): Vector2 {
         return this.boardPosition;
     }
 
@@ -91,7 +98,7 @@ export class Entity
         const position = this.mainBoard.GetCellCenterPosition(x, z);
 
         this.transformNode.setAbsolutePosition(position);
-        this.boardPosition = new BABYLON.Vector2(x, z);
+        this.boardPosition = new Vector2(x, z);
         this.instanceMesh.metadata.x = this.boardPosition.x;
         this.instanceMesh.metadata.z = this.boardPosition.y;
     }
@@ -105,24 +112,24 @@ export class Entity
         switch(forward)
         {
             case LookDirection.X_MINUS:
-                this.instanceMesh.rotation = new BABYLON.Vector3(0, 0, 0);
+                this.instanceMesh.rotation = new Vector3(0, 0, 0);
                 break;
 
             case LookDirection.X_PLUS:
-                this.instanceMesh.rotation = new BABYLON.Vector3(0, Math.PI, 0);
+                this.instanceMesh.rotation = new Vector3(0, Math.PI, 0);
                 break;
 
             case LookDirection.Z_MINUS:
-                this.instanceMesh.rotation = new BABYLON.Vector3(0, Math.PI / 2, 0);
+                this.instanceMesh.rotation = new Vector3(0, Math.PI / 2, 0);
                 break;
 
             case LookDirection.Z_PLUS:
-                this.instanceMesh.rotation = new BABYLON.Vector3(0,  - Math.PI / 2, 0);
+                this.instanceMesh.rotation = new Vector3(0,  - Math.PI / 2, 0);
                 break;
         }
     }
 
-    public GetBoardPosition() :  BABYLON.Vector2
+    public GetBoardPosition() :  Vector2
     {
         return this.boardPosition;
     }

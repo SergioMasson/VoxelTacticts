@@ -1,4 +1,10 @@
-import * as BABYLON from "@babylonjs/core/";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
+import { Color3 } from "@babylonjs/core/Maths/math.color";
+import { Vector2, Vector3 } from "@babylonjs/core/Maths/math.vector";
+import { Mesh } from "@babylonjs/core/Meshes/mesh";
+import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
+import { TransformNode } from "@babylonjs/core/Meshes/transformNode";
+import { Scene } from "@babylonjs/core/scene";
 import { Entity } from "./entity";
 
 const CELL_WIDTH = 0.5;
@@ -10,20 +16,20 @@ const flashingPeriod = 0.5;
 export class Board
 {
     private entities: Array<Entity>;
-    private cells: Array<BABYLON.Mesh>;
-    private highlightedCells: Array<BABYLON.Mesh>;
+    private cells: Array<Mesh>;
+    private highlightedCells: Array<Mesh>;
     private width : number;
     private height: number;
     
     private colorAlpha: number;
     private timer: number;
 
-    private boardTransform: BABYLON.TransformNode;
+    private boardTransform: TransformNode;
 
-    constructor(scene: BABYLON.Scene, width: number, height: number, evenColor: BABYLON.Color3, oddColor: BABYLON.Color3)
+    constructor(scene: Scene, width: number, height: number, evenColor: Color3, oddColor: Color3)
     {
-        this.cells = new Array<BABYLON.Mesh>();
-        this.boardTransform = new BABYLON.TransformNode("Board Root");
+        this.cells = new Array<Mesh>();
+        this.boardTransform = new TransformNode("Board Root");
 
         let left = -((width >> 1) * CELL_WIDTH);
         let top = -((height >> 1) * CELL_DEPTH);
@@ -32,17 +38,17 @@ export class Board
         {
             for (let z = 0; z < height; z++) 
             {
-                const cell = BABYLON.MeshBuilder.CreateBox(`cell_${x}x${z}`, 
+                const cell = MeshBuilder.CreateBox(`cell_${x}x${z}`, 
                 { 
                     width: CELL_WIDTH, 
                     height: CELL_HEIGHT,
                     depth: CELL_DEPTH
                 }, scene);
                 
-                cell.position = new BABYLON.Vector3(left + x * CELL_WIDTH, 0, top + z * CELL_DEPTH);
+                cell.position = new Vector3(left + x * CELL_WIDTH, 0, top + z * CELL_DEPTH);
                 cell.metadata = {type: "cell", x: x, z: z};
 
-                const cellMaterial = new BABYLON.StandardMaterial("");
+                const cellMaterial = new StandardMaterial("");
                 cell.material = cellMaterial;
                 cellMaterial.diffuseColor = (x & 1) ^ (z & 1) ? evenColor : oddColor;
                 this.cells.push(cell);
@@ -52,7 +58,7 @@ export class Board
         }
 
         this.entities = new Array<Entity>(width * height);
-        this.highlightedCells = new Array<BABYLON.Mesh>(0);
+        this.highlightedCells = new Array<Mesh>(0);
         this.width = width;
         this.height = height;
 
@@ -63,9 +69,9 @@ export class Board
     update(deltaT: number): void {
         for (let k = 0; k < this.highlightedCells.length; k++) {
             let cell = this.highlightedCells[k];
-            let material = cell.material as BABYLON.StandardMaterial;
+            let material = cell.material as StandardMaterial;
 
-            material.emissiveColor = new BABYLON.Color3(0.2 + this.colorAlpha / 2, 0.2 + this.colorAlpha / 2, 0.2 + this.colorAlpha / 2);
+            material.emissiveColor = new Color3(0.2 + this.colorAlpha / 2, 0.2 + this.colorAlpha / 2, 0.2 + this.colorAlpha / 2);
         }
 
         for (let t = 0; t < deltaT; t += 1 / 60) {
@@ -78,25 +84,25 @@ export class Board
         }
     }
 
-    GetBoundsDepth() : BABYLON.Vector2
+    GetBoundsDepth() : Vector2
     {
-        return new BABYLON.Vector2(-((this.height - 1) * CELL_DEPTH) / 2, ((this.height - 1) * CELL_DEPTH) / 2);
+        return new Vector2(-((this.height - 1) * CELL_DEPTH) / 2, ((this.height - 1) * CELL_DEPTH) / 2);
     }
 
-    GetBoundsWidth() : BABYLON.Vector2
+    GetBoundsWidth() : Vector2
     {
-        return new BABYLON.Vector2(-((this.width - 1) * CELL_WIDTH) / 2, ((this.width - 1) * CELL_WIDTH) / 2);
+        return new Vector2(-((this.width - 1) * CELL_WIDTH) / 2, ((this.width - 1) * CELL_WIDTH) / 2);
     }
 
-    GetWorldFromBoardSpace(x: number, z: number) : BABYLON.Vector3
+    GetWorldFromBoardSpace(x: number, z: number) : Vector3
     {
         const worldX = (x - (this.width / 2)) * CELL_WIDTH;
         const worldZ = (z - (this.height / 2)) * CELL_DEPTH;
 
-        return new BABYLON.Vector3(worldX, 0, worldZ);
+        return new Vector3(worldX, 0, worldZ);
     }
 
-    public FindAround(x: number, z: number, range: number, type: string, returnOccupied: boolean): Array<BABYLON.Mesh> {
+    public FindAround(x: number, z: number, range: number, type: string, returnOccupied: boolean): Array<Mesh> {
         let foundPositions = [];
 
         const tabuleiro = this;
@@ -140,9 +146,9 @@ export class Board
     UnHighlightCells(): void {
         for (let k = 0; k < this.highlightedCells.length; k++) {
             let cell = this.highlightedCells[k];
-            let material = cell.material as BABYLON.StandardMaterial;
+            let material = cell.material as StandardMaterial;
 
-            material.emissiveColor = new BABYLON.Color3(0,0,0);
+            material.emissiveColor = new Color3(0,0,0);
         }
 
         this.highlightedCells = [];
@@ -185,12 +191,12 @@ export class Board
         return returnedEntities;
     }
 
-    GetCellCenterPosition(x: number, z: number) : BABYLON.Vector3
+    GetCellCenterPosition(x: number, z: number) : Vector3
     {
         const sceneX = (x * CELL_WIDTH) - (CELL_WIDTH * this.width / 2);
         const sceneZ = (z * CELL_DEPTH) - (CELL_DEPTH * this.height / 2);
 
-        return new BABYLON.Vector3(sceneX, 0, sceneZ);
+        return new Vector3(sceneX, 0, sceneZ);
     }
 
     GetEntityAtCell(x: number, z: number) : Entity | null
@@ -208,9 +214,9 @@ export class Board
         this.entities[x + (this.width * z)] = null;
     }
 
-    FitPositionToCell(position: BABYLON.Vector3) : BABYLON.Vector3 
+    FitPositionToCell(position: Vector3) : Vector3 
     {
-        var bestFit = new BABYLON.Vector3(0, 0, 0);
+        var bestFit = new Vector3(0, 0, 0);
         var lastDistance = 1000000;
 
         for (let index = 0; index < this.cells.length; index++) {

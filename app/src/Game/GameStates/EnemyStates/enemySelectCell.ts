@@ -1,26 +1,28 @@
-import { GameState } from "./../state";
+import { Camera } from "@babylonjs/core/Cameras/camera";
+import { Vector2 } from "@babylonjs/core/Maths/math.vector";
+import { Scene } from "@babylonjs/core/scene";
 import { Board } from "../../board";
 import { Cursor } from "../../cursor";
-import * as BABYLON from "@babylonjs/core";
 import { Entity } from "../../entity";
-import { Sound } from "../../sound";
+import { GameSound } from "../../sound";
+import { GameState } from "./../state";
 
 const FRAME_WAIT = 60;
 
 export class EnemySelectCell implements GameState {
 	private board: Board;
-	private scene: BABYLON.Scene;
+	private scene: Scene;
 	private cursor: Cursor;
 	private shouldEnd: boolean;
 	private nextStateInfo: Array<Number>;
 	private timer: number;
 
 	private selectedEntity: Entity;
-	private movePos: BABYLON.Vector2;
+	private movePos: Vector2;
 
-	private soundPlayer: Sound;
+	private soundPlayer: GameSound;
 
-	constructor(scene: BABYLON.Scene, board: Board, camera: BABYLON.Camera, cursor: Cursor, sound: Sound) {
+	constructor(scene: Scene, board: Board, camera: Camera, cursor: Cursor, sound: GameSound) {
 		this.board = board;
 		this.scene = scene;
 		this.cursor = cursor;
@@ -32,7 +34,7 @@ export class EnemySelectCell implements GameState {
 		let entity = this.board.GetEntityAtCell(selectedEntityPos[0], selectedEntityPos[1]);
 		let players = this.board.FindEntitiesOfType("player");
 
-		this.movePos = new BABYLON.Vector2(selectedEntityPos[0], selectedEntityPos[1]);
+		this.movePos = new Vector2(selectedEntityPos[0], selectedEntityPos[1]);
 		this.nextStateInfo = selectedEntityPos;
 		this.board.HighlightCells(selectedEntityPos[0], selectedEntityPos[1], entity.GetRange());
 

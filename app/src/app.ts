@@ -1,7 +1,4 @@
-import * as BABYLON from "@babylonjs/core";
-import "@babylonjs/core/Debug/debugLayer";
-import "@babylonjs/inspector";
-import "@babylonjs/loaders/glTF";
+import { Engine } from "@babylonjs/core/Engines/engine";
 import { Game } from "./Game/game";
 
 const levelsArray = ["level0", "level1", "level2"];
@@ -10,7 +7,7 @@ let currentLevel = 0;
 class App {
     constructor(canvas: HTMLCanvasElement) {
         // initialize babylon scene and engine
-        var engine = new BABYLON.Engine(canvas, true);
+        var engine = new Engine(canvas, true);
         var game = new Game(engine, canvas);
 
         window.addEventListener("resize", () => {

@@ -13,8 +13,8 @@ module.exports = {
   mode: "development",
   devServer: {
     open: true,
-    watchFiles: ["./src/**/*", "../app/lib/**/*", "../assets/**/*"],
-    static: path.resolve(appDirectory, "../assets"), //tells webpack to serve from the public folder
+    watchFiles: ["./src/**/*", "../app/lib/**/*", "../docs/**/*"],
+    static: path.resolve(appDirectory, "../docs"), //tells webpack to serve from the public folder
   },
   output: {
     filename: "bundle.js",

@@ -1,21 +1,22 @@
-import { GameState } from "./../state";
-import { Cursor } from "../../cursor";
+import { Camera } from "@babylonjs/core/Cameras/camera";
+import { Scene } from "@babylonjs/core/scene";
 import { Board } from "../../board";
+import { Cursor } from "../../cursor";
 import { Entity } from "../../entity";
-import * as BABYLON from "@babylonjs/core";
-import { Sound } from "../../sound";
+import { GameSound } from "../../sound";
+import { GameState } from "./../state";
 
 export class EntityMoveState implements GameState
 {
     private board: Board;
-    private scene: BABYLON.Scene;
+    private scene: Scene;
     private cursor: Cursor;
     private shouldEnd: boolean;
     private movedEntity: Entity;
     private stateData: Array<number>;
-    private soundPlayer: Sound;
+    private soundPlayer: GameSound;
 
-    constructor(scene: BABYLON.Scene, board: Board, camera: BABYLON.Camera, cursor: Cursor, sound: Sound) {
+    constructor(scene: Scene, board: Board, camera: Camera, cursor: Cursor, sound: GameSound) {
         this.board = board;
         this.scene = scene;
         this.cursor = cursor;

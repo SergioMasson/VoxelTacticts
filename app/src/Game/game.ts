@@ -1,25 +1,39 @@
-import * as BABYLON from "@babylonjs/core";
+import "@babylonjs/core/Animations/animatable";
+import "@babylonjs/loaders/glTF";
+
+import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
+import { Engine } from "@babylonjs/core/Engines/engine";
+import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
+import { SceneLoader } from "@babylonjs/core/Loading/sceneLoader";
+import { Texture } from "@babylonjs/core/Materials/Textures/texture";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector";
+import { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
+import { Mesh } from "@babylonjs/core/Meshes/mesh";
+import { Scene } from "@babylonjs/core/scene";
+
 import * as GUI from "@babylonjs/gui";
+import { GameStateMachine } from "./GameStates/gameStateMachine";
 import { Board } from "./board";
 import { Cursor } from "./cursor";
-import { GameStateMachine } from "./GameStates/gameStateMachine";
 import { GameLevel } from "./level";
-import { Sound } from "./sound";
+import { GameSound } from "./sound";
+
 
 export class Game 
 {
-    private engine : BABYLON.Engine;
+    private engine : Engine;
     private canvas: HTMLCanvasElement;
 
-    private scene : BABYLON.Scene;
+    private scene : Scene;
     private board : Board;
     private cursor : Cursor;
     private gameStateMachine: GameStateMachine;
-    private sound: Sound;
+    private sound: GameSound;
 
     private disposed: boolean;
 
-    constructor(engine: BABYLON.Engine, canvas : HTMLCanvasElement) 
+    constructor(engine: Engine, canvas : HTMLCanvasElement) 
     {
         this.engine = engine;
         this.canvas = canvas;
@@ -27,27 +41,27 @@ export class Game
 
     async StartLevel(level: string) : Promise<void> 
     {
-        this.scene = new BABYLON.Scene(this.engine);
-        this.sound = new Sound(this.scene);
-        const mainCamera = new BABYLON.ArcRotateCamera("mainCamera", Math.PI / 4, Math.PI / 3, 9, new BABYLON.Vector3(-1, 0, 0), this.scene);
+        this.scene = new Scene(this.engine);
+        this.sound = new GameSound(this.scene);
+        const mainCamera = new ArcRotateCamera("mainCamera", Math.PI / 4, Math.PI / 3, 9, new Vector3(-1, 0, 0), this.scene);
         mainCamera.attachControl(this.canvas);
         mainCamera.upperRadiusLimit = 10;
         mainCamera.lowerRadiusLimit = 3;
         mainCamera.upperBetaLimit = Math.PI / 3;
         mainCamera.lowerBetaLimit = Math.PI / 6;
-        mainCamera.target = new BABYLON.Vector3(-7, 0, -4);
+        mainCamera.target = new Vector3(-7, 0, -4);
         mainCamera.radius = 8;
         mainCamera.alpha = Math.PI / 4;
         mainCamera.beta = Math.PI / 3;
 
-        var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), this.scene);
+        var light = new HemisphericLight("light", new Vector3(0, 1, 0), this.scene);
         light.intensity = 0.7;
 
-        const pointerMesh = await this.LoadEntity("pointer", new BABYLON.Vector3(0.7, 0.7, 0.7));
+        const pointerMesh = await this.LoadEntity("pointer", new Vector3(0.7, 0.7, 0.7));
         pointerMesh.isVisible = true;
         
         this.board = await GameLevel.LoadFromJSONAsync(level, this.scene, mainCamera);
-        this.cursor = new Cursor(this.board, this.scene, mainCamera, pointerMesh as BABYLON.Mesh);    
+        this.cursor = new Cursor(this.board, this.scene, mainCamera, pointerMesh as Mesh);    
         this.gameStateMachine = new GameStateMachine(this.board, this.scene, mainCamera, this.cursor, this.sound);
         this.disposed = false;
     }
@@ -56,8 +70,7 @@ export class Game
     {
         this.scene.dispose();
         this.scene = null;
-        this.scene = new BABYLON.Scene(this.engine);
-        this.scene.createDefaultCamera();
+        this.scene = new Scene(this.engine);
         this.cursor = null;
         this.board = null;
         this.gameStateMachine = null;
@@ -66,16 +79,15 @@ export class Game
         this.StartLevel(level);
     }
 
-    async LoadEntity(entityName: string, scaling: BABYLON.Vector3) : Promise<BABYLON.AbstractMesh>
+    async LoadEntity(entityName: string, scaling: Vector3) : Promise<AbstractMesh>
     {
-        const resultPlayer = await BABYLON.SceneLoader.ImportMeshAsync(null, "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/models/", `${entityName}.glb`);
+        const resultPlayer = await SceneLoader.ImportMeshAsync(null, "https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/models/", `${entityName}.glb`);
         const result = resultPlayer.meshes[0];
         result.scaling = scaling;
-        const playerMaterial = new BABYLON.StandardMaterial("");
+        const playerMaterial = new StandardMaterial("");
         result.material = playerMaterial;
         result.isVisible = false;
-
-        playerMaterial.diffuseTexture = new BABYLON.Texture(`./textures/player.png`);
+        playerMaterial.diffuseTexture = new Texture(`https://raw.githubusercontent.com/SergioMasson/GAMUX-LIVRE-GAME-JAM/main/public/textures/player.png`);
         return result;
     }
 
@@ -92,8 +104,8 @@ export class Game
     {
         this.scene.dispose();
         this.scene = null;
-        this.scene = new BABYLON.Scene(this.engine);
-        this.scene.createDefaultCamera();
+        this.scene = new Scene(this.engine);
+        const mainCamera = new ArcRotateCamera("mainCamera", Math.PI / 4, Math.PI / 3, 9, new Vector3(-1, 0, 0), this.scene);
         this.cursor = null;
         this.board = null;
         this.gameStateMachine = null;

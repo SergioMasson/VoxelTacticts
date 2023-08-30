@@ -1,20 +1,23 @@
+import { Camera } from "@babylonjs/core/Cameras/camera";
+import { PointerEventTypes, PointerInfo } from "@babylonjs/core/Events/pointerEvents";
+import { Observer } from "@babylonjs/core/Misc/observable";
+import { Scene } from "@babylonjs/core/scene";
 import { Board } from "../../board";
-import { GameState } from "./../state";
 import { Cursor } from "../../cursor";
-import * as BABYLON from "@babylonjs/core";
-import { Sound } from "../../sound";
+import { GameSound } from "../../sound";
+import { GameState } from "./../state";
 
 export class EntitySelectState implements GameState
 {
-    private scene: BABYLON.Scene;
-    private onClickObservable: BABYLON.Observer<BABYLON.PointerInfo>;
+    private scene: Scene;
+    private onClickObservable: Observer<PointerInfo>;
     private shouldEnd: boolean;
     private board: Board;
-    private camera: BABYLON.Camera;
+    private camera: Camera;
     private cursor: Cursor;
-    private soundPlayer: Sound;
+    private soundPlayer: GameSound;
 
-    constructor(scene: BABYLON.Scene, board: Board, camera: BABYLON.Camera, cursor: Cursor, sound: Sound) 
+    constructor(scene: Scene, board: Board, camera: Camera, cursor: Cursor, sound: GameSound) 
     {
         this.scene = scene;
         this.board = board;
@@ -29,7 +32,7 @@ export class EntitySelectState implements GameState
         console.log("Starting  EntitySelectState");
         this.onClickObservable = this.scene.onPointerObservable.add((pointerInfo) => 
         {
-            if(pointerInfo.type == BABYLON.PointerEventTypes.POINTERDOWN)
+            if(pointerInfo.type == PointerEventTypes.POINTERDOWN)
             {
                 if (this.cursor.getCursorOverEntity()) {
                     let cursorPos = this.cursor.getCursorOverPos();

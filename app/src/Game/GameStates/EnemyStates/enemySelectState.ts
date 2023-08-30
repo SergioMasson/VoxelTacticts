@@ -1,24 +1,27 @@
+import { Camera } from "@babylonjs/core/Cameras/camera";
+import { PointerInfo } from "@babylonjs/core/Events/pointerEvents";
+import { Observer } from "@babylonjs/core/Misc/observable";
+import { Scene } from "@babylonjs/core/scene";
 import { Board } from "../../board";
-import { GameState } from "./../state";
 import { Cursor } from "../../cursor";
-import * as BABYLON from "@babylonjs/core";
 import { Entity } from "../../entity";
-import { Sound } from "../../sound";
+import { GameSound } from "../../sound";
+import { GameState } from "./../state";
 
 export class EnemySelectState implements GameState
 {
-    private scene: BABYLON.Scene;
-    private onClickObservable: BABYLON.Observer<BABYLON.PointerInfo>;
+    private scene: Scene;
+    private onClickObservable: Observer<PointerInfo>;
     private shouldEnd: boolean;
     private board: Board;
-    private camera: BABYLON.Camera;
+    private camera: Camera;
 	private cursor: Cursor;
 	
     private selectedEnemy: Entity;
     
-    private soundPlayer: Sound;
+    private soundPlayer: GameSound;
 
-    constructor(scene: BABYLON.Scene, board: Board, camera: BABYLON.Camera, cursor: Cursor, sound: Sound) 
+    constructor(scene: Scene, board: Board, camera: Camera, cursor: Cursor, sound: GameSound) 
     {
         this.scene = scene;
         this.board = board;

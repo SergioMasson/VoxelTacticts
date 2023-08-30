@@ -1,6 +1,7 @@
+import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { Board } from "../../board";
 import { GameState } from "./../state";
-import * as BABYLON from "@babylonjs/core";
 
 const FOCUS_SPEED = 2;
 const FOCUS_RADIUS = 8;
@@ -10,12 +11,12 @@ const FOCUS_BETHA = Math.PI / 3;
 export class CameraMoveToEntityState implements GameState
 {
     private stateData: Array<Number>;
-    private camera: BABYLON.ArcRotateCamera;
+    private camera: ArcRotateCamera;
     private board: Board;
     private shouldEnd: boolean;
 
-    private initialTarget: BABYLON.Vector3;
-    private finalTarget: BABYLON.Vector3;
+    private initialTarget: Vector3;
+    private finalTarget: Vector3;
 
     private initialRaius: number;
     private finalRadius: number;
@@ -28,7 +29,7 @@ export class CameraMoveToEntityState implements GameState
 
     private progress: number;
 
-    constructor(board: Board, camera: BABYLON.ArcRotateCamera)
+    constructor(board: Board, camera: ArcRotateCamera)
     {
         this.board = board;
         this.camera = camera;
@@ -65,7 +66,7 @@ export class CameraMoveToEntityState implements GameState
         {
             this.progress += deltaT * FOCUS_SPEED;
 
-            const newTarget = BABYLON.Vector3.Lerp(this.initialTarget, this.finalTarget, this.progress)
+            const newTarget = Vector3.Lerp(this.initialTarget, this.finalTarget, this.progress)
             this.camera.setTarget(newTarget);
             
             this.camera.radius = (this.finalRadius * this.progress) + (this.initialRaius * (1 - this.progress));
