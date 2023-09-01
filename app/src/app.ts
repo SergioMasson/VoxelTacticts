@@ -17,25 +17,24 @@ class App {
         const firstLevel = levelsArray[currentLevel];
 
         if (firstLevel != undefined) {
-            game.StartLevel(firstLevel).then(function (): void {
-                // run the main render loop
-                engine.runRenderLoop(() => {
-                    game.Update(engine.getDeltaTime() / 1000);
+            game.StartLevel(firstLevel);
 
-                    if (game.ShouldEndLevel()) {
-                        currentLevel++;
+            engine.runRenderLoop(() => {
+                game.Update(engine.getDeltaTime() / 1000);
 
-                        const nextLevel = levelsArray[currentLevel];
+                if (game.ShouldEndLevel()) {
+                    currentLevel++;
 
-                        if (currentLevel < levelsArray.length && nextLevel != undefined) 
-                        {
-                            game.LoadNewLevel(nextLevel);
-                        }
-                        else {
-                            game.ShowEndGameScreen();
-                        }
+                    const nextLevel = levelsArray[currentLevel];
+
+                    if (currentLevel < levelsArray.length && nextLevel != undefined) 
+                    {
+                        game.LoadNewLevel(nextLevel);
                     }
-                });
+                    else {
+                        game.ShowEndGameScreen();
+                    }
+                }
             });
         }
 

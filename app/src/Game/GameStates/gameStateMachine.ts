@@ -6,6 +6,7 @@ import { Board } from "../board";
 import { Cursor } from "../cursor";
 import { GameState } from "./state";
 
+import { TextBlock } from "@babylonjs/gui/2D/controls/textBlock";
 import { GameSound } from "../sound";
 import { CheckGameEndedState } from "./CheckGameEndedState";
 import { EnemyActionExecute } from "./EnemyStates/enemyActionExecute";
@@ -25,7 +26,7 @@ export class GameStateMachine
     currentStateIndex: number;
     isEnemyTurn: Boolean;
 
-    constructor(board: Board, scene: Scene, camera: Camera, cursor: Cursor, sound: GameSound)
+    constructor(board: Board, scene: Scene, camera: Camera, cursor: Cursor, sound: GameSound, instructions: TextBlock)
     {
         this.states = new Array<GameState>();
         this.states.push(new EntitySelectState(scene, board, camera, cursor, sound));

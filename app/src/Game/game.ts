@@ -1,4 +1,6 @@
 import "@babylonjs/core/Animations/animatable";
+import "@babylonjs/core/Helpers/sceneHelpers";
+import "@babylonjs/core/sceneComponent";
 import "@babylonjs/loaders/glTF";
 
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
@@ -12,12 +14,14 @@ import { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { Scene } from "@babylonjs/core/scene";
 
-import * as GUI from "@babylonjs/gui";
+import { AdvancedDynamicTexture } from "@babylonjs/gui/2D/advancedDynamicTexture";
+import { TextBlock } from "@babylonjs/gui/2D/controls/textBlock";
 import { GameStateMachine } from "./GameStates/gameStateMachine";
 import { Board } from "./board";
 import { Cursor } from "./cursor";
 import { GameLevel } from "./level";
 import { GameSound } from "./sound";
+import { StartScreen } from "./startScreen";
 
 
 export class Game 
@@ -39,8 +43,21 @@ export class Game
         this.canvas = canvas;
     }
 
-    async StartLevel(level: string) : Promise<void> 
+    StartLevel(level: string) : void
     {
+        this.scene = new Scene(this.engine);
+        this.scene.createDefaultCameraOrLight();
+        const startScreen = new StartScreen();
+        startScreen.Show(this.scene).then(async () => 
+        {
+            this.scene.dispose();
+            this.LoadLevel(level);
+        });
+    }
+
+    async LoadLevel(level: string) : Promise<void> 
+    {
+        this.disposed = false;
         this.scene = new Scene(this.engine);
         this.sound = new GameSound(this.scene);
         const mainCamera = new ArcRotateCamera("mainCamera", Math.PI / 4, Math.PI / 3, 9, new Vector3(-1, 0, 0), this.scene);
@@ -59,11 +76,15 @@ export class Game
 
         const pointerMesh = await this.LoadEntity("pointer", new Vector3(0.7, 0.7, 0.7));
         pointerMesh.isVisible = true;
-        
+
         this.board = await GameLevel.LoadFromJSONAsync(level, this.scene, mainCamera);
-        this.cursor = new Cursor(this.board, this.scene, mainCamera, pointerMesh as Mesh);    
-        this.gameStateMachine = new GameStateMachine(this.board, this.scene, mainCamera, this.cursor, this.sound);
-        this.disposed = false;
+        this.cursor = new Cursor(this.board, this.scene, mainCamera, pointerMesh as Mesh);
+
+        const UITexture = AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, this.scene);
+        const loadedGUI = await UITexture.parseFromURLAsync("./UI/mainScreen.json");
+        const instructionsText = loadedGUI.getControlByName("InstructionsText") as TextBlock;
+
+        this.gameStateMachine = new GameStateMachine(this.board, this.scene, mainCamera, this.cursor, this.sound, instructionsText);
     }
 
     LoadNewLevel(level: string) : void
@@ -76,7 +97,7 @@ export class Game
         this.gameStateMachine = null;
         this.disposed = true;
 
-        this.StartLevel(level);
+        this.LoadLevel(level);
     }
 
     async LoadEntity(entityName: string, scaling: Vector3) : Promise<AbstractMesh>
@@ -97,6 +118,10 @@ export class Game
             return false;
         }
 
+        if(!this.gameStateMachine) {
+            return false;
+        }
+
         return this.gameStateMachine.ShouldEndGame();
     }
 
@@ -111,22 +136,31 @@ export class Game
         this.gameStateMachine = null;
         this.disposed = true;
 
-        var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+        var advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         advancedTexture.parseFromURLAsync("./UI/END_SCREEN.json");
         this.sound.MuteMusic();
     }
 
     Update(deltaT: number) : void
     {
-        this.scene.render();
+        if(this.scene) {
+            this.scene.render();
+        }
 
         if (this.disposed) {
             return;
         }
 
-        this.cursor.Update();
-        this.board.update(deltaT);
-        this.gameStateMachine.Update(deltaT);
+        if (this.cursor) {
+            this.cursor.Update();
+        }
+
+        if (this.board) {
+            this.board.update(deltaT);
+        }
         
+        if (this.gameStateMachine) {
+            this.gameStateMachine.Update(deltaT);
+        }
     }
 }
